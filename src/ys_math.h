@@ -63,7 +63,6 @@ typedef vec3 color3;
 typedef vec4 color4;
 
 
-
 /*
  * === VEC2 INTERFACE ===
 */
@@ -137,7 +136,8 @@ inline mat2 mat2_mul_s(const mat2 a, const float s);
 inline mat2 mat2_div_s(const mat2 a, const float s);
 inline mat2 mat2_transpose(const mat2 a);
 inline mat2 mat2_mul(const mat2 a, const mat2 b);
-inline mat2 mat2_div(const mat2 a, const mat2 b);
+inline mat2 mat2_identity(void);
+inline mat2 mat2_inverse(const mat2 a);
 
 
 #ifdef YS_MATH_IMPLEMENTATION
@@ -545,21 +545,204 @@ inline mat2 mat2_transpose(const mat2 a) {
 }
 
 inline mat2 mat2_mul(const mat2 a, const mat2 b) {
-    mat2 r = {};
+    mat2 r;
+    r.m00 = a.m00 * b.m00 + a.m01 * b.m10;
+    r.m01 = a.m00 * b.m01 + a.m01 * b.m11;
+    r.m10 = a.m10 * b.m00 + a.m11 * b.m10;
+    r.m11 = a.m10 * b.m01 + a.m11 * b.m11;
     return r;
-
 }
 
-inline mat2 mat2_div(const mat2 a, const mat2 b) {
-    mat2 r = {};
+inline mat2 mat2_identity(void) {
+    mat2 r;
+    r.e[0] = 1;
+    r.e[1] = 0;
+    r.e[2] = 0;
+    r.e[4] = 1;
+    return r;
+}
+
+inline mat2 mat2_inverse(const mat2 a) {
+    float s = 1.0f/(a.m00 * a.m11 - a.m01 * a.m10);
+    mat2 r;
+    r.m00 = a.m11 * s;
+    r.m01 = -a.m01 * s;
+    r.m10 = - a.m10 * s;
+    r.m11 = a.m00 * s;
     return r;
 }
 /*
  * ==== MAT 3 =======
 */
 
+inline mat3 mat3_add(const mat3 a, const mat3 b) {
+    mat3 r;
+    for (int i = 0; i < 9; ++i) {
+        r.e[i] = a.e[i] + b.e[i];
+    }
+    return r;
+}
+
+inline mat3 mat3_sub(const mat3 a, const mat3 b) {
+    mat3 r;
+    for (int i = 0; i < 9; ++i) {
+        r.e[i] = a.e[i] - b.e[i];
+    }
+    return r;
+}
+
+inline mat3 mat3_mul_s(const mat3 a, const float s) {
+    mat3 r;
+    for (int i = 0; i < 9; ++i) {
+        r.e[i] = a.e[i] * s;
+    }
+    return r;
+}
+
+inline mat3 mat3_div_s(const mat3 a, const float s) {
+    float inv_s = 1.0f/s;
+    return mat3_mul_s(a, inv_s);
+}
+
+inline mat3 mat3_transpose(const mat3 a) {
+    mat3 r;
+    r.m00 = a.m00;
+    r.m01 = a.m10;
+    r.m02 = a.m20;
+    r.m10 = a.m01;
+    r.m11 = a.m11;
+    r.m12 = a.m21;
+    r.m20 = a.m02;
+    r.m21 = a.m12;
+    r.m22 = a.m22;
+    return r;
+}
+
+inline mat3 mat3_mul(const mat3 a, const mat3 b) {
+    mat3 r;
+    r.m00 = a.m00 * b.m00 + a.m01 * b.m10 + a.m02 * b.m20;
+    r.m01 = a.m00 * b.m01 + a.m01 * b.m11 + a.m02 * b.m21;
+    r.m02 = a.m00 * b.m02 + a.m01 * b.m12 + a.m02 * b.m22;
+    r.m10 = a.m10 * b.m00 + a.m11 * b.m10 + a.m12 * b.m20;
+    r.m11 = a.m10 * b.m01 + a.m11 * b.m11 + a.m12 * b.m21;
+    r.m12 = a.m10 * b.m02 + a.m11 * b.m12 + a.m12 * b.m22;
+    r.m20 = a.m20 * b.m00 + a.m21 * b.m10 + a.m22 * b.m20;
+    r.m21 = a.m20 * b.m01 + a.m21 * b.m11 + a.m22 * b.m21;
+    r.m22 = a.m20 * b.m02 + a.m21 * b.m12 + a.m22 * b.m22;
+    return r;
+}
+
+inline mat3 mat3_identity(void) {
+    mat3 r;
+    r.m00 = 1;
+    r.m01 = 0;
+    r.m02 = 0;
+    r.m10 = 0;
+    r.m11 = 1;
+    r.m12 = 0;
+    r.m20 = 0;
+    r.m21 = 1;
+    return r;
+}
+
+inline mat3 mat3_inverse(const mat3 a) {
+    mat3 r;
+    return r;
+}
+
+
 /*
  * ==== MAT 4 =======
 */
+inline mat4 mat4_add(const mat4 a, const mat4 b) {
+    mat4 r;
+    for (int i = 0; i < 16; ++i) {
+        r.e[i] = a.e[i] + b.e[i];
+    }
+    return r;
+}
+
+inline mat4 mat4_sub(const mat4 a, const mat4 b) {
+    mat4 r;
+    for (int i = 0; i < 16; ++i) {
+        r.e[i] = a.e[i] - b.e[i];
+    }
+    return r;
+}
+
+inline mat4 mat4_mul_s(const mat4 a, const float s) {
+    mat4 r;
+    for (int i = 0; i < 16; ++i) {
+        r.e[i] = a.e[i] * s;
+    }
+    return r;
+}
+
+inline mat4 mat4_div_s(const mat4 a, const float s) {
+    float inv_s = 1.0f/s;
+    return mat4_mul_s(a, inv_s);
+}
+
+inline mat4 mat4_transpose(const mat4 a) {
+    mat4 r;
+    r.m00 = a.m00;
+    r.m01 = a.m10;
+    r.m02 = a.m20;
+    r.m03 = a.m30;
+    r.m10 = a.m01;
+    r.m11 = a.m11;
+    r.m12 = a.m21;
+    r.m13 = a.m31;
+    r.m20 = a.m02;
+    r.m21 = a.m12;
+    r.m22 = a.m22;
+    r.m23 = a.m32;
+    r.m30 = a.m03;
+    r.m31 = a.m13;
+    r.m32 = a.m23;
+    r.m33 = a.m33;
+    return r;
+}
+
+inline mat4 mat4_mul(const mat4 a, const mat4 b) {
+    mat4 r;
+    r.m00 = a.m00 * b.m00 + a.m01 * b.m10 + a.m02 * b.m20;
+    r.m01 = a.m00 * b.m01 + a.m01 * b.m11 + a.m02 * b.m21;
+    r.m02 = a.m00 * b.m02 + a.m01 * b.m12 + a.m02 * b.m22;
+    r.m10 = a.m10 * b.m + a.m11 * b + a.m12 * b;
+    r.m11;
+    r.m12;
+    r.m20;
+    r.m21;
+    r.m22;
+    return r;
+}
+
+inline mat4 mat4_identity(void) {
+    mat4 r;
+    r.m00 = 1;
+    r.m01 = 0;
+    r.m02 = 0;
+    r.m03 = 0;
+    r.m10 = 0;
+    r.m11 = 1;
+    r.m12 = 0;
+    r.m13 = 0;
+    r.m20 = 0;
+    r.m21 = 0;
+    r.m22 = 1;
+    r.m32 = 0;
+    r.m30 = 0;
+    r.m31 = 0;
+    r.m32 = 0;
+    r.m33 = 1;
+    return r;
+}
+
+inline mat4 mat4_inverse(const mat4 a) {
+    mat4 r;
+    return r;
+}
+
 #endif
 #endif
