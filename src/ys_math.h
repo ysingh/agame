@@ -140,6 +140,31 @@ inline mat2 mat2_identity(void);
 inline mat2 mat2_inverse(const mat2 a);
 
 
+/*
+ * === MAT3 INTERFACE ===
+*/
+inline mat3 mat3_add(const mat3 a, const mat3 b);
+inline mat3 mat3_sub(const mat3 a, const mat3 b);
+inline mat3 mat3_mul_s(const mat3 a, const float s);
+inline mat3 mat3_div_s(const mat3 a, const float s);
+inline mat3 mat3_transpose(const mat3 a);
+inline mat3 mat3_mul(const mat3 a, const mat3 b);
+inline mat3 mat3_identity(void);
+inline mat3 mat3_inverse(const mat3 a);
+
+
+/*
+ * === MAT4 INTERFACE ===
+*/
+inline mat4 mat4_add(const mat4 a, const mat4 b);
+inline mat4 mat4_sub(const mat4 a, const mat4 b);
+inline mat4 mat4_mul_s(const mat4 a, const float s);
+inline mat4 mat4_div_s(const mat4 a, const float s);
+inline mat4 mat4_transpose(const mat4 a);
+inline mat4 mat4_mul(const mat4 a, const mat4 b);
+inline mat4 mat4_identity(void);
+inline mat4 mat4_inverse(const mat4 a);
+
 #ifdef YS_MATH_IMPLEMENTATION
 
 
