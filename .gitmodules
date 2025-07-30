@@ -1,0 +1,3 @@
+[submodule "ys_base"]
+	path = ys_base
+	url = ../ys_base
